@@ -25,8 +25,8 @@ public:
         check_deadline();
     }
 
-    void connect_tcp(const std::string& host,
-               const std::string& service, long timeout_sec);
+    void connect_tcp(std::string host,
+               std::string service, long timeout_sec);
 
     size_t read(char *rbuf, size_t capacity, long timeout_microsec);
 
