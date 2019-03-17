@@ -16,15 +16,15 @@ class NativeType:
 REMAP_T = {
     'ArrayOf(Integer, 2)': NativeType('std::vector<Integer>', True),
     'Boolean': NativeType('bool'),
-    'String': NativeType('std::string', True),
+    'String': NativeType('String', True),
     'void': NativeType('void'),
     'Window': NativeType('Window'),
     'Buffer': NativeType('Buffer'),
     'Tabpage': NativeType('Tabpage'),
     'Integer': NativeType('Integer'),
     'Object': NativeType('Object', True),
-    # 'Array':NativeType('Array', True),
-    # 'Dictionary':NativeType('Dictionary', True)
+    'Array':NativeType('Array', True),
+    'Dictionary':NativeType('Dictionary', True)
 }
 
 def convert_type_to_native(nvim_t, enable_ref_op, const_ref=True, ref=False):
@@ -55,16 +55,16 @@ def main():
     env = Environment(loader=FileSystemLoader('templates', encoding='utf8'))
 
     api_info = subprocess.check_output(["nvim", '--api-info'])
-    unpacked_api = msgpack.unpackb(api_info, raw=False)
+    unpacked_api = msgpack.unpackb(api_info, encoding='utf-8')
 
-# generate nvim.hpp
+# generate nvim_api.hpp
     functions = []
     for f in unpacked_api['functions']:
 
         d = {}
-        # if re.match(r'(n?vim_)?(ui.*|(un)?subscribe|.*(de|a)ttach.*)', f['name']):
-        #     print('This is ui function: ' + f['name'])
-        #     continue
+        if re.match(r'(n?vim_)?(ui.*|(un)?subscribe|.*(de|a)ttach.*)', f['name']):
+            print('This is ui function: ' + f['name'])
+            continue
         d['name'] = f['name']
 
         try:
@@ -75,10 +75,13 @@ def main():
         except InvalidType as e:
             print("invalid function = " + str(f))
 
-    tpl = env.get_template('nvim.hpp')
+    tpl = env.get_template('nvim_api.hpp')
     api = tpl.render({'functions': functions})
-    with open(os.path.join("./gen", "nvim.hpp"), 'w') as f:
+    with open(os.path.join("./gen", "nvim_api.hpp"), 'w') as f:
         f.write(api)
+
+    with open(os.path.join('./gen', 'api_level.hpp'), 'w') as f:
+        f.write('#define NVIM_API_LEVEL ' + str(unpacked_api['version']['api_level']))
 
 if __name__ == '__main__':
     main()

@@ -1,28 +1,15 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 1.0.0)
 
-project(neovim_client_cpp)
+project(neovim_client CXX)
 
-find_package(Boost 1.55.0 REQUIRED COMPONENTS system coroutine context thread)
+set(CMAKE_CXX_COMPILER "/usr/bin/clang++" CACHE string "clang compiler" FORCE)
+set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
-set(MSGPACK_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/msgpack-c)
+# Boost
+find_package(Boost 1.55.0 REQUIRED COMPONENTS system thread)
 
-#add_subdirectory(${MSGPACK_SOURCE_DIR})
-set(CMAKE_CXX_FLAGS "-DMSGPACK_USE_BOOST ${CMAKE_CXX_FLAGS}") #TODO: import every flags directly from msgpack-c
-
-include_directories(
-    include
-    gen
-    ${Boost_INCLUDE_DIR}
-    ${MSGPACK_SOURCE_DIR}/include
-)
-
-add_executable(test 
-    src/main.cpp
-    src/socket.cpp
-)
-
-target_link_libraries(test ${Boost_LIBRARIES})
+set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-DMSGPACK_USE_BOOST ${CMAKE_CXX_FLAGS}")
 
 find_package(PythonInterp)
 if (PYTHONINTERP_FOUND)
@@ -33,4 +20,17 @@ if (PYTHONINTERP_FOUND)
     )
 endif()
 
-add_dependencies(test auto_gen_api)
+add_library(nvim_client SHARED src/neovim.cpp src/socket.cpp)
+# target_compile_options(nvim_client PRIVATE "-g")
+
+include_directories(
+    include
+    gen
+    ${Boost_INCLUDE_DIR}
+)
+
+add_executable(test src/main.cpp)
+target_link_libraries(test nvim_client)
+target_link_libraries(test ${Boost_LIBRARIES})
+add_dependencies(test auto_gen_api nvim_client)
+

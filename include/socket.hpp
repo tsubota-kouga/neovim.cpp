@@ -14,22 +14,27 @@
 
 namespace nvim {
 
-//TODO Implement asynchronous response handler.
-class Socket {
+class Socket
+{
 public:
-    Socket() : 
-        socket_(io_service_),
-        deadline_(io_service_)
+    Socket() :
+        socket_{io_service_},
+        deadline_{io_service_}
     {
         deadline_.expires_at(boost::posix_time::pos_infin);
         check_deadline();
     }
 
-    void connect_tcp(const std::string& host, 
-               const std::string& service, double timeout_sec);
+    void connect_tcp(const std::string& host,
+               const std::string& service, long timeout_sec);
 
-    size_t read(char *rbuf, size_t capacity, double timeout_sec);
-    void write(char *sbuf, size_t size, double timeout_sec);
+    size_t read(char *rbuf, size_t capacity, long timeout_microsec);
+
+    size_t ui_read(char *rbuf, size_t capacity, long timeout_microsec);
+
+    void write(char *sbuf, size_t size, long timeout_sec);
+
+    size_t available(){ return socket_.available(); }
 
 private:
     void check_deadline();

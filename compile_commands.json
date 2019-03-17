@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/kouga/Documents/cpp/Basilico/neovim.cpp/build",
+  "command": "/usr/bin/clang++   -I/home/kouga/Documents/cpp/Basilico/neovim.cpp/include -I/home/kouga/Documents/cpp/Basilico/neovim.cpp/gen  -DMSGPACK_USE_BOOST -std=c++17    -std=gnu++1z -o CMakeFiles/test.dir/src/main.o -c /home/kouga/Documents/cpp/Basilico/neovim.cpp/src/main.cpp",
+  "file": "/home/kouga/Documents/cpp/Basilico/neovim.cpp/src/main.cpp"
+},
+{
+  "directory": "/home/kouga/Documents/cpp/Basilico/neovim.cpp/build",
+  "command": "/usr/bin/clang++  -Dnvim_client_EXPORTS -I/home/kouga/Documents/cpp/Basilico/neovim.cpp/include -I/home/kouga/Documents/cpp/Basilico/neovim.cpp/gen  -DMSGPACK_USE_BOOST -std=c++17  -fPIC   -g -std=gnu++1z -o CMakeFiles/nvim_client.dir/src/neovim.o -c /home/kouga/Documents/cpp/Basilico/neovim.cpp/src/neovim.cpp",
+  "file": "/home/kouga/Documents/cpp/Basilico/neovim.cpp/src/neovim.cpp"
+},
+{
+  "directory": "/home/kouga/Documents/cpp/Basilico/neovim.cpp/build",
+  "command": "/usr/bin/clang++  -Dnvim_client_EXPORTS -I/home/kouga/Documents/cpp/Basilico/neovim.cpp/include -I/home/kouga/Documents/cpp/Basilico/neovim.cpp/gen  -DMSGPACK_USE_BOOST -std=c++17  -fPIC   -g -std=gnu++1z -o CMakeFiles/nvim_client.dir/src/socket.o -c /home/kouga/Documents/cpp/Basilico/neovim.cpp/src/socket.cpp",
+  "file": "/home/kouga/Documents/cpp/Basilico/neovim.cpp/src/socket.cpp"
+}
+]
